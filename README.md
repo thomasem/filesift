@@ -23,6 +23,6 @@ go build -o dedupef ./cmd/dedupef
 
 ## Options
 
-`-dir string`: source directory to dedupe (default ".")
-`-out string`: output directory to store deduplicated copies (default "output")
-`-dry-run`: print unique files
+* `-dir string`: source directory to dedupe (default ".")
+* `-out string`: output directory to store deduplicated copies (default "output")
+* `-dry-run`: print unique files
