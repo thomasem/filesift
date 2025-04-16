@@ -12,23 +12,29 @@ func showHelp() {
 	fmt.Printf(`Usage: filesift <command> [options]
 
 Commands:
-    dedupe    Find duplicate or similar files
+    dedupe    		Find duplicate or similar files
+    find-similar 	Find similar files and prompt for which to keep
 
 Use "filesift <command> -h" for help with a specific command.
 `)
 }
 
+func exitWithHelp(msg string, code int) {
+	if msg != "" {
+		fmt.Println(msg)
+	}
+	showHelp()
+	os.Exit(code)
+}
+
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Missing required argument(s)")
-		showHelp()
-		os.Exit(1)
+		exitWithHelp("Missing required argument(s)", 1)
 	}
 
 	firstArg, rest := os.Args[1], os.Args[2:]
 	if firstArg == "-h" || firstArg == "--help" {
-		showHelp()
-		os.Exit(0)
+		exitWithHelp("", 0)
 	}
 
 	var err error
@@ -37,10 +43,11 @@ func main() {
 	case commands.DeduplicateCommandName:
 		cmd := commands.NewDeduplicateCommand()
 		err = cmd.Run(rest)
+	case commands.FindSimilarCommandName:
+		cmd := commands.NewFindSimilarCommand()
+		err = cmd.Run(rest)
 	default:
-		fmt.Println("Command not found")
-		showHelp()
-		os.Exit(1)
+		exitWithHelp("Command not found", 1)
 	}
 
 	if err != nil {

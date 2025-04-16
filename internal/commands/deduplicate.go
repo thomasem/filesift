@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/thomasem/filesift/internal/copy"
 	"github.com/thomasem/filesift/internal/unique"
@@ -12,10 +13,6 @@ import (
 
 const (
 	DeduplicateCommandName = "dedupe"
-
-	SourceDirectoryOptionName = "src"
-	OutputDirectoryOptionName = "out"
-	DryRunOptionName          = "dry-run"
 )
 
 type DeduplicateCommand struct {
@@ -67,6 +64,14 @@ func (dc *DeduplicateCommand) Run(args []string) error {
 	return nil
 }
 
+func confirmPrompt() bool {
+	var response string
+	fmt.Print("Enter [y]es/[N]o: ")
+	fmt.Scanln(&response)
+	r := strings.ToLower(response)
+	return r == "y" || r == "yes"
+}
+
 func directoryExists(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
@@ -89,7 +94,7 @@ func ensureOutputDirectory(dst string) error {
 
 	if exists {
 		fmt.Printf("Output directory (%s) exists. Do you want to overwrite? ", dst)
-		if !confirm() {
+		if !confirmPrompt() {
 			return ErrAborted
 		}
 

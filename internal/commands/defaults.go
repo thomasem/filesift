@@ -1,7 +1,7 @@
 package commands
 
 const (
-	DefaultSourceDir = "/path/to/source"
+	DefaultSourceDir = "."
 	DefaultOutputDir = "output"
 	DefaultFileMode  = 0755
 )
