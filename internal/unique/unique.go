@@ -17,8 +17,7 @@ func ComputeChecksum(path string) (string, error) {
 	defer file.Close()
 
 	sum := sha256.New()
-	_, err = io.Copy(sum, file)
-	if err != nil {
+	if _, err := io.Copy(sum, file); err != nil {
 		return "", err
 	}
 
@@ -42,13 +41,13 @@ func GetUniqueFiles(dir string) ([]string, error) {
 		if err != nil {
 			return fmt.Errorf("error computing checksum for %s: %s", path, err)
 		}
-		_, ok := uniqueFiles[sum]
-		if !ok {
+		if _, ok := uniqueFiles[sum]; !ok {
 			uniqueFiles[sum] = path
 		}
 
 		return nil
 	})
+
 	if err != nil {
 		return nil, err
 	}
